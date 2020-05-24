@@ -1,0 +1,126 @@
+@keyframes rotateRight {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateRightAbsY {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes moveInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-20rem);
+    }
+
+    80% {
+        transform: translateX(1rem);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes moveInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(20rem);
+    }
+
+    80% {
+        transform: translateX(-1rem);
+    }
+
+    100% {
+        opactiy: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes moveInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(20rem);
+    }
+
+    80% {
+        transform: translateY(-1rem);
+    }
+
+    100% {
+        opactiy: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* react-transition-group animations */
+
+.router-transition {
+    &__container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    &-enter {
+        opacity: 0;
+        transform: scale(1.1);
+
+        &-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity $page-transition-ms ease-out,
+                transform $page-transition-ms ease-out;
+        }
+    }
+
+    &-exit {
+        opacity: 1;
+        transform: scale(1);
+        &-active {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity $page-transition-ms ease-in,
+                transform $page-transition-ms ease-in;
+        }
+    }
+}
