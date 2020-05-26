@@ -1,30 +1,27 @@
 import React from 'react';
-// import { Route } from 'react-router-dom';
-// import { CSSTransition } from 'react-transition-group';
-// import { routes } from 'app/config';
-// tslint:disable-next-line: no-import-side-effect
-import 'styles/sass/main.scss';
+import {
+    ThemeProvider,
+    CSSReset,
+    ColorModeProvider,
+    Box,
+} from '@chakra-ui/core';
+import { Switch, Route } from 'react-router-dom';
+
+import { basicTheme } from 'styles';
+import { routes } from 'app/config';
+import { ModeToggler } from './components';
 
 export const App: React.FC = () => {
     return (
-        <div>
-            app
-            {/* {routes.map(({ path, Component }) => (
-                    <Route key={path} exact path={path}>
-                        {({ match }) => (
-                            <CSSTransition
-                                in={match != null}
-                                timeout={SCREEN_TRANSITION_MS}
-                                classNames='router-transition'
-                                unmountOnExit
-                            >
-                                <div className='router-transition__container'>
-                                    <Component />
-                                </div>
-                            </CSSTransition>
-                        )}
-                    </Route>
-                ))} */}
-        </div>
+        <ThemeProvider theme={basicTheme}>
+            <ColorModeProvider>
+                <CSSReset />
+                <Switch>
+                    {routes.map((route, i) => (
+                        <Route key={i} {...route} />
+                    ))}
+                </Switch>
+            </ColorModeProvider>
+        </ThemeProvider>
     );
 };
