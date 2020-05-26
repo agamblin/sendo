@@ -58,6 +58,3 @@ export const isEmailAvailable = async (values: any) => {
         return Promise.reject({ email: 'Email is already taken' });
     }
 };
-
-export const isMin5Max20 = getMinMaxFunction(5, 20);
-export const isMin3Max20 = getMinMaxFunction(3, 20);
