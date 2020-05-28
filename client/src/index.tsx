@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from 'app/App';
-import { Root } from 'app/config';
+import { Root, configureStore } from 'app/config';
 
-ReactDOM.render(
-    <Root>
-        <App />
-    </Root>,
-    document.querySelector('#root')
-);
+export const store = configureStore();
+
+ReactDOM.render(<Root store={store} />, document.querySelector('#root'));

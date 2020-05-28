@@ -24,15 +24,9 @@ export class User extends Model {
     public id!: number; // Note that the `null assertion` `!` is required in strict mode.
     public firstName: string;
     public lastName: string;
-    public username!: string;
     public email!: string; // for nullable fields
     public avatarUrl: string;
-    public country: string;
-    public city: string;
-    public phoneNumber: string;
     public password: string;
-    public superAdmin: boolean;
-    public hashtag: string;
 
     // timestamps!
     public readonly createdAt!: Date;
@@ -60,13 +54,12 @@ export const initUser = (db: Sequelize) => {
                 type: DataTypes.STRING(128),
                 allowNull: false,
             },
-
-            password: {
-                type: new DataTypes.STRING(128),
-                allowNull: false,
-            },
             email: {
                 type: DataTypes.STRING,
+                allowNull: false,
+            },
+            password: {
+                type: new DataTypes.STRING(128),
                 allowNull: false,
             },
             avatarUrl: {

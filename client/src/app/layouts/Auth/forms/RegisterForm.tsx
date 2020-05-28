@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { SimpleGrid, Button } from '@chakra-ui/core';
 import { reduxForm, InjectedFormProps, Field } from 'redux-form';
+import { useDispatch } from 'react-redux';
 import { FormEntry } from 'app/components';
 import {
     required,
@@ -9,29 +10,37 @@ import {
     getMaxFunction,
     matchesPassword,
     capitalizeWords,
+    isEmailAvailable,
 } from 'app/shared';
+import { ReduxFormValues, register } from 'app/actions';
+import { useSelector } from 'app/custom-hooks';
 
-export type ReduxFormValues = { [key: string]: string };
 interface IProps {}
 
 const _RegisterForm: React.FC<IProps &
     InjectedFormProps<{}, IProps>> = React.memo(({ handleSubmit }) => {
-    const onSubmit = useCallback((formValues: ReduxFormValues) => {
-        // tslint:disable-next-line: no-console
-        console.log('register values', formValues);
-    }, []);
+    const dispatch = useDispatch();
+    const isLoading = useSelector(
+        state => state.authentification.register.isLoading
+    );
+
+    const onSubmit = useCallback(
+        (formValues: ReduxFormValues) => {
+            dispatch(register(formValues));
+        },
+        [dispatch]
+    );
 
     return (
         <SimpleGrid
-            px={8}
-            py={8}
+            p={8}
             as='form'
             columns={1}
             spacing={8}
             onSubmit={handleSubmit(onSubmit)}
         >
             <Field
-                name='firstname'
+                name='fullName'
                 type='text'
                 label='Name'
                 placeholder='Your full name'
@@ -63,7 +72,7 @@ const _RegisterForm: React.FC<IProps &
                 component={FormEntry}
                 validate={[required, matchesPassword]}
             />
-            <Button d='block' variantColor='blue' type='submit'>
+            <Button variantColor='blue' type='submit' isLoading={isLoading}>
                 Sign up
             </Button>
         </SimpleGrid>
@@ -72,4 +81,6 @@ const _RegisterForm: React.FC<IProps &
 
 export const RegisterForm = reduxForm<{}, IProps>({
     form: 'register',
+    asyncValidate: isEmailAvailable,
+    asyncBlurFields: ['email'],
 })(_RegisterForm);

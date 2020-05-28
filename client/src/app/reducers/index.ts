@@ -1,8 +1,10 @@
 import { combineReducers, Action } from 'redux';
 import { reducer as formReducer } from 'redux-form';
+import authReducer from './authentification';
 
 export const appReducer = combineReducers({
     form: formReducer,
+    authentification: authReducer,
 });
 
 export type RootState = ReturnType<typeof appReducer>;

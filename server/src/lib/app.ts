@@ -20,7 +20,7 @@ app.use('/jobs', jobRoutes);
 
 // Healthcheck route
 app.get('/', (_req, res) => {
-    return res.status(200).json({ success: 'Spendo {API v1.0} is online' });
+    return res.status(200).json({ success: 'Sendo {API v1.0} is online' });
 });
 
 // Error handler

@@ -32,11 +32,10 @@ userRoutes.post(
         body('email').isEmail().withMessage('Please enter a valid email'),
         body('password')
             .trim()
-            .isLength({ min: 5, max: 20 })
-            .withMessage('Please enter a password between 5 and 20 characters'),
+            .isLength({ min: 8, max: 50 })
+            .withMessage('Please enter a password between 8 and 50 characters'),
         body('firstName').trim().isString(),
         body('lastName').trim().isString(),
-        body('username').trim().isLength({ min: 2, max: 25 }),
     ],
     requireValidation,
     userController.create
