@@ -34,7 +34,6 @@ class UserController extends ModelController<typeof User> {
             }
             const user = await User.create(req.body);
             return res.status(201).json({
-                user: omit(user.get({ plain: true }), ...FORBIDDEN_FIELDS),
                 token: user.getAccessToken(),
             });
         } catch (err) {
@@ -60,7 +59,6 @@ class UserController extends ModelController<typeof User> {
                 return next(unauthorizedError('Invalid credentials'));
             }
             return res.status(200).json({
-                user: omit(user.get({ plain: true }), ...FORBIDDEN_FIELDS),
                 token: user.getAccessToken(),
             });
         } catch (err) {
@@ -90,16 +88,13 @@ class UserController extends ModelController<typeof User> {
         res: Response,
         next: NextFunction
     ): Promise<void | Response> {
-        const { user } = req;
+        const { user, body } = req;
 
         try {
-            user.username = req.body.username || user.username;
-            user.avatarUrl = req.body.avatarUrl || user.avatarUrl;
-            user.country = req.body.country || user.country;
-            user.city = req.body.city || user.city;
-            user.firstName = req.body.firstName || user.firstName;
-            user.lastName = req.body.lastName || user.lastName;
-            user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
+            user.email = body.email || user.email;
+            user.firstName = body.firstName || user.firstName;
+            user.lastName = body.lastName || user.lastName;
+            user.avatarUrl = body.avatarUrl || user.avatarUrl;
             await user.save();
             return res
                 .status(200)
@@ -122,7 +117,7 @@ class UserController extends ModelController<typeof User> {
             if (!user) {
                 return res.sendStatus(200);
             }
-            return next(conflictError());
+            return next(conflictError('Email is already in use'));
         } catch (err) {
             return next(err);
         }

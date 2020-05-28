@@ -1,8 +1,27 @@
 import React from 'react';
-import { Box } from '@chakra-ui/core';
+import { PageForm, LoginForm } from 'app/layouts';
+import { UILink } from 'app/components';
+import { routesPath } from 'app/config';
+import { requireAnonyme } from 'app/HOC';
 
 interface IProps {}
 
-export const LoginPage: React.FC<IProps> = () => {
-    return <Box>Login page</Box>;
+const _LoginPage: React.FC<IProps> = () => {
+    return (
+        <PageForm
+            title='Sign in to Sendo'
+            footer={
+                <>
+                    New to Sendo ?{' '}
+                    <UILink to={routesPath.register} color='blue.500'>
+                        Sign up
+                    </UILink>
+                </>
+            }
+        >
+            <LoginForm />
+        </PageForm>
+    );
 };
+
+export const LoginPage = requireAnonyme(_LoginPage);
