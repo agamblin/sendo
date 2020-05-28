@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { SimpleGrid, Button } from '@chakra-ui/core';
+import React, { useCallback, useState } from 'react';
+import { SimpleGrid, Button, useToast } from '@chakra-ui/core';
 import { reduxForm, InjectedFormProps, Field } from 'redux-form';
 import { useDispatch } from 'react-redux';
 import { FormEntry } from 'app/components';
@@ -12,23 +12,42 @@ import {
     capitalizeWords,
     isEmailAvailable,
 } from 'app/shared';
-import { ReduxFormValues, register } from 'app/actions';
-import { useSelector } from 'app/custom-hooks';
+import { ReduxFormValues, register, AsyncDispatch } from 'app/actions';
 
 interface IProps {}
 
 const _RegisterForm: React.FC<IProps &
     InjectedFormProps<{}, IProps>> = React.memo(({ handleSubmit }) => {
-    const dispatch = useDispatch();
-    const isLoading = useSelector(
-        state => state.authentification.register.isLoading
-    );
+    const dispatch = useDispatch() as AsyncDispatch;
+    const toast = useToast();
+    const [isLoading, setLoading] = useState(false);
 
     const onSubmit = useCallback(
-        (formValues: ReduxFormValues) => {
-            dispatch(register(formValues));
+        async (formValues: ReduxFormValues) => {
+            setLoading(true);
+            try {
+                const firstName = await dispatch(register(formValues));
+                toast({
+                    position: 'top',
+                    duration: 9000,
+                    isClosable: true,
+                    title: 'Account created',
+                    status: 'success',
+                    description: `Happy to see you with us ${firstName} !`,
+                });
+            } catch (err) {
+                setLoading(false);
+                toast({
+                    position: 'top',
+                    duration: 9000,
+                    isClosable: true,
+                    title: 'Oops ! An error occured',
+                    status: 'error',
+                    description: err || 'Unknown error',
+                });
+            }
         },
-        [dispatch]
+        [dispatch, toast]
     );
 
     return (

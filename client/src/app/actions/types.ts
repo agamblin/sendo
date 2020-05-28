@@ -6,33 +6,34 @@ import {
     ILoginError,
     IRegisterSuccess,
     IRegisterError,
-    ILoginRequest,
-    IRegisterRequest,
 } from './authentification';
+import { IFetchMeSuccess, IFetchMeError } from './user';
 
 export enum ActionTypes {
-    loginRequest,
     loginSuccess,
     loginError,
-    registerRequest,
     registerSuccess,
     registerError,
+    fetchMeSuccess,
+    fetchMeError,
     logout,
 }
 
 export type Action =
-    | ILoginRequest
     | ILoginSuccess
     | ILoginError
-    | IRegisterRequest
     | IRegisterSuccess
-    | IRegisterError;
+    | IRegisterError
+    | IFetchMeSuccess
+    | IFetchMeError;
 
 export type AppThunk = ThunkAction<
-    Promise<void>,
+    Promise<any>,
     RootState,
     unknown,
     ReduxAction<ActionTypes>
 >;
+
+export type AsyncDispatch = (action: Function) => Promise<void>;
 
 export type ReduxFormValues = { [key: string]: string };

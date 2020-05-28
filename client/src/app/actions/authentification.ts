@@ -2,22 +2,9 @@ import api from 'app/api';
 import { ActionTypes, AppThunk, ReduxFormValues } from './types';
 import { serializeState, resetSerializedState } from 'app/shared';
 
-// export interface IUser {
-//     id: number;
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-//     avatarUrl: string;
-// }
-
 /** TYPES */
 interface IAuthSuccess {
     token: string;
-}
-
-/** LOGIN  */
-export interface ILoginRequest {
-    type: ActionTypes.loginRequest;
 }
 
 export interface ILoginSuccess {
@@ -31,10 +18,6 @@ export interface ILoginError {
 }
 
 /** REGISTER */
-
-export interface IRegisterRequest {
-    type: ActionTypes.registerRequest;
-}
 
 export interface IRegisterSuccess {
     type: ActionTypes.registerSuccess;
@@ -52,10 +35,6 @@ export const login = (loginFormValues: ReduxFormValues): AppThunk => async (
     getState
 ) => {
     try {
-        if (getState().authentification.login.isLoading) {
-            return Promise.resolve();
-        }
-        dispatch<ILoginRequest>({ type: ActionTypes.loginRequest });
         const {
             data: { token },
         } = await api.post<IAuthSuccess>('/users/token', loginFormValues);
@@ -64,6 +43,7 @@ export const login = (loginFormValues: ReduxFormValues): AppThunk => async (
             payload: token,
         });
         serializeState(getState());
+        return Promise.resolve();
     } catch ({
         response: {
             data: { message },
@@ -74,6 +54,7 @@ export const login = (loginFormValues: ReduxFormValues): AppThunk => async (
             type: ActionTypes.loginError,
             payload: message,
         });
+        return Promise.reject(message);
     }
 };
 
@@ -83,12 +64,6 @@ export const register = (
     try {
         const [firstName, ...lastName] = registerFormValues.fullName.split(' ');
 
-        /** avoid race conditions */
-        if (getState().authentification.register.isLoading) {
-            return Promise.resolve();
-        }
-        /** indicate request is processing  */
-        dispatch<IRegisterRequest>({ type: ActionTypes.registerRequest });
         const {
             data: { token },
         } = await api.post<IAuthSuccess>('/users', {
@@ -102,6 +77,7 @@ export const register = (
             payload: token,
         });
         serializeState(getState());
+        return Promise.resolve(firstName);
     } catch ({
         response: {
             data: { message },
@@ -113,5 +89,6 @@ export const register = (
             type: ActionTypes.registerError,
             payload: message,
         });
+        return Promise.reject(message);
     }
 };
