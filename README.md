@@ -9,4 +9,4 @@ PayPal like project for Technology &amp; Media school
 - go back the root repository and launch the application with `docker-compose up --build`
 
 
-The application should then be available on `localhost:8081` 
+The application should then be available on [localhost:8081](http://localhost:8081)
